@@ -36,7 +36,7 @@ float i_control(float ki, float error, float error_prev, float T, float i_contro
 }
 
 float d_control(float kd, float error, float error_prev, float T, float d_control_prev, float down_limit, float up_limit){
-    float d_control_val = (kd * 2/T * (error - error_prev));
+    float d_control_val = (kd *  (error - error_prev)/T);
 
     if (d_control_val > up_limit){
       d_control_val = up_limit;

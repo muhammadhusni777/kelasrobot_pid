@@ -73,23 +73,26 @@ void loop() {
 
 
   //4 p = kp*e
-  float kp = 2;
+  float kp = 2.5;
   p = p_control(kp, e);
 
 
   //5 i = ki(konstanta integral) * jumlah error keseluruhan selama sistem nyala
   float ki = 0.1;
+  //memanggil function dengan urutan inputan ki, error, error sebelumnya, interval, nilai i sebelumnya, nilai min, dan nilai max
   i = i_control(ki, e, e_prev, 0.5, i_prev, 0, 255);
 
 
   //6 d = kd * perbedaan error per satuan waktu
-  float kd = 0.08;
+  float kd = 0;
   d = d_control(kd, e, e_prev, 0.5, d_prev, 0, 255);
 
 
   // p tambah i tambah d
   pid = p+i+d;
   
+
+  //batasin nilai PID sesuai dengan kemampuan pwm microcontroller
   if (pid > 255){
     pid = 255;
   }
@@ -98,9 +101,11 @@ void loop() {
   }
 
   
-  //masuk ke plant
+  //masuk ke plant lewat pin pwm
   analogWrite(9, pid);
 
+
+  //debug apa yang terjadi
   Serial.print("sp : ");
   Serial.print(sp);
 
@@ -123,8 +128,6 @@ void loop() {
   Serial.print(" d : ");
   Serial.print(d);
 
-  Serial.print(" d_prev : ");
-  Serial.print(d_prev);
 
   Serial.print(" pid : ");
   Serial.print(pid);
